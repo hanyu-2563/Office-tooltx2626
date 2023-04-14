@@ -1,7 +1,7 @@
 //only for test   
 //This program has not undergone rigorous experiments and is not yet available as a finished product
 using Microsoft.Office.Interop.Word;
-
+//ttpp
 public void ConvertNumberedListToText()
 {
     // 获取当前Word应用程序实例

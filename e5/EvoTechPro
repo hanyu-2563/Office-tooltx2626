@@ -1,0 +1,59 @@
+Option Explicit
+
+' 定义一个名为 "FormatDocument" 的子过程，用于执行排版操作
+Sub FormatDocument()
+    ' 在此处添加您的排版代码
+    ' 这是一个示例，您可以根据需要自定义
+    
+    ' 设置页面大小为A4
+    ActiveDocument.PageSetup.PaperSize = wdPaperA4
+    
+    ' 设置页面边距（单位为磅）
+    ActiveDocument.PageSetup.TopMargin = InchesToPoints(1)
+    ActiveDocument.PageSetup.BottomMargin = InchesToPoints(1)
+    ActiveDocument.PageSetup.LeftMargin = InchesToPoints(1)
+    ActiveDocument.PageSetup.RightMargin = InchesToPoints(1)
+    
+    ' 设置字体和段落样式等
+    With ActiveDocument.Content
+        .Font.Name = "Arial"
+        .Font.Size = 12
+        .ParagraphFormat.Alignment = wdAlignParagraphLeft
+    End With
+End Sub
+
+' 定义一个名为 "AddFormattingButton" 的子过程，用于在Word中添加一个按钮，点击该按钮时执行排版操作
+Sub AddFormattingButton()
+    ' 创建一个自定义工具栏或使用现有工具栏
+    ' 这里我们使用现有的 "Standard" 工具栏
+    Dim tb As CommandBar
+    On Error Resume Next
+    Set tb = CommandBars("Standard")
+    On Error GoTo 0
+    
+    If tb Is Nothing Then
+        MsgBox "未找到 'Standard' 工具栏。无法添加按钮。", vbExclamation
+        Exit Sub
+    End If
+    
+    ' 添加一个按钮到工具栏
+    Dim btn As CommandBarButton
+    Set btn = tb.Controls.Add(Type:=msoControlButton)
+    
+    ' 配置按钮属性
+    With btn
+        .Caption = "排版文档" ' 按钮的显示名称
+        .Style = msoButtonCaption ' 显示文本而不是图标
+        .OnAction = "FormatDocument" ' 点击按钮时执行的宏
+        .FaceId = 59 ' 选择图标样式
+    End With
+    
+    Set btn = Nothing
+    Set tb = Nothing
+End Sub
+
+' 在文档加载时执行的事件
+Private Sub Document_Open()
+    ' 当文档打开时自动添加按钮
+    AddFormattingButton
+End Sub
